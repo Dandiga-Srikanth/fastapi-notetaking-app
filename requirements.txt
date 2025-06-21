@@ -26,3 +26,5 @@ uvicorn==0.34.3
 python-dotenv==1.1.0
 psycopg2-2.9.10
 psycopg2-binary-2.9.10
+sqlalchemy-continuum-1.4.2
+sqlalchemy-utils-0.41.2

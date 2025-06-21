@@ -11,13 +11,16 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # Import the Base and DATABASE_URL from your app’s database configuration
-
 from app.db.session import Base, SQLALCHEMY_DATABASE_URL
+from app.models import user
+import sqlalchemy.orm
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URL)
+sqlalchemy.orm.configure_mappers()
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
