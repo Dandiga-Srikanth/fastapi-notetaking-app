@@ -13,6 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import the Base and DATABASE_URL from your app’s database configuration
 from app.db.session import Base, SQLALCHEMY_DATABASE_URL
 from app.models import user
+from app.models import note
 import sqlalchemy.orm
 
 
