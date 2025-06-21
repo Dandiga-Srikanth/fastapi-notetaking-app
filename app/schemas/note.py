@@ -7,9 +7,9 @@ class NoteBase(BaseModel):
     content: str = Field(..., min_length=1, max_length=5000)
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         alias_generator = lambda s: ''.join([s[0].lower()] + [c if c.islower() else f"{c}" for c in s[1:]])
-        allow_population_by_field_name = True
+        validate_by_name = True
 
 class NoteCreate(NoteBase):
     pass

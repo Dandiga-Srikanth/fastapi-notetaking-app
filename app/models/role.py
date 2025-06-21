@@ -11,5 +11,5 @@ class Role(Base, AuditMixin):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, nullable=False)
 
-    users = relationship("User", back_populates="role", cascade="all, delete")
+    users = relationship("User", back_populates="role", foreign_keys="[User.role_id]", cascade="all, delete")
     permissions = relationship("Permission", secondary="role_permissions", back_populates="roles")

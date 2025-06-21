@@ -14,5 +14,5 @@ class User(Base, AuditMixin):
 
     role_id = Column(Integer, ForeignKey("roles.id", ondelete="SET NULL"), nullable=True)
     
-    role = relationship("Role", back_populates="users")
-    notes = relationship("Note", back_populates="owner", cascade="all, delete-orphan")
+    role = relationship("Role", back_populates="users", foreign_keys=[role_id])
+    notes = relationship("Note", back_populates="owner", foreign_keys="[Note.user_id]", cascade="all, delete-orphan")

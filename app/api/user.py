@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app import schemas, crud
-from app.db.session import get_db
+from app.dependencies.db import get_db
 from app.exceptions.handlers import DuplicateUserException
 
 router = APIRouter(prefix="/api/v1/users", tags=["Users"])
@@ -11,6 +11,7 @@ router = APIRouter(prefix="/api/v1/users", tags=["Users"])
 
 @router.post("/", response_model=schemas.user.UserRead, status_code=status.HTTP_201_CREATED)
 def create_user(user_in: schemas.user.UserCreate, db: Session = Depends(get_db)):
+    print("user_in",user_in)
     existing_user = crud.user.get_user_by_email(db, user_in.email)
     if existing_user:
         raise DuplicateUserException

@@ -14,4 +14,4 @@ class Note(Base, AuditMixin):
     
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
-    owner = relationship("User", back_populates="notes")
+    owner = relationship("User", back_populates="notes", foreign_keys=[user_id])

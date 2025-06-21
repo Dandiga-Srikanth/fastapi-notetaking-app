@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException
 from app.models.user import User
+from app.models.role import Role
 from app.schemas.user import UserCreate, UserUpdate
 from app.auth.security import hash_password
 
@@ -17,12 +18,20 @@ def get_all_users(db: Session) -> list[User]:
 
 
 def create_user(db: Session, user_in: UserCreate) -> User:
-    hashed_pw = hash_password(user_in.password)
+    role_id = None
+    if user_in.role_name:
+        role = db.query(Role).filter(Role.name == user_in.role_name.value).first()
+        if not role:
+            raise HTTPException(status_code=400, detail="Invalid role name")
+        role_id = role.id
+    print("role_id", role_id)
+
     db_user = User(
         email=user_in.email,
-        password=hashed_pw,
+        password=hash_password(user_in.password),
         first_name=user_in.first_name,
         last_name=user_in.last_name,
+        role_id=role_id
     )
     db.add(db_user)
     db.commit()
