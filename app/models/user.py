@@ -1,9 +1,9 @@
 from app.db.session import Base
 from sqlalchemy import Column, Integer, String
+from app.models.mixins import AuditMixin
 
-class User(Base):
+class User(Base, AuditMixin):
     __tablename__ = "users"
-    __versioned__ = {}
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, nullable=False, index=True)
