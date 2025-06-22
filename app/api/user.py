@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Annotated
 
 from app import schemas, crud
 from app.dependencies.db import get_db
+from app.dependencies.auth import get_current_active_user
 from app.exceptions.handlers import DuplicateUserException
+from app.models.user import User
+
 
 router = APIRouter(prefix="/api/v1/users", tags=["Users"])
 
@@ -40,8 +43,9 @@ def update_user(user_id: int, user_in: schemas.user.UserUpdate, db: Session = De
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    success = crud.user.delete_user(db, user_id)
+def delete_user(user_id: str, current_user: Annotated[User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
+    print("user_id",user_id)
+    success = crud.user.delete_user(db, int(user_id))
     if not success:
         raise HTTPException(status_code=404, detail="User not found")
     return
