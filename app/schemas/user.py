@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from app.schemas.role import RoleRead
 from app.core.config import RoleEnum
+from pydantic.alias_generators import to_camel
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -10,7 +11,7 @@ class UserBase(BaseModel):
 
     class Config:
         from_attributes = True
-        alias_generator = lambda s: ''.join([s[0].lower()] + [c if c.islower() else f"{c}" for c in s[1:]])
+        alias_generator = to_camel
         validate_by_name = True
         use_enum_values = False
 
