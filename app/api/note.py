@@ -7,6 +7,7 @@ from app.dependencies.auth import get_current_active_user
 
 from app.models.user import User
 from app import schemas, crud
+from app.exceptions.handlers import NoteNotFoundException
 
 router = APIRouter(prefix="/api/v1/notes", tags=["Notes"])
 
@@ -22,20 +23,20 @@ def list_notes(current_user: Annotated[User, Depends(get_current_active_user)], 
 def get_note(note_id: int, current_user: Annotated[User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
     note = crud.note.get_note_by_id(db=db, note_id=note_id, user_id=current_user.id)
     if not note:
-        raise HTTPException(status_code=404, detail="Note not found")
+        raise NoteNotFoundException()
     return note
 
 @router.put("/{note_id}", response_model=schemas.note.NoteRead, status_code=status.HTTP_200_OK)
 def update_note(note_id: int, note_in: schemas.note.NoteUpdate, current_user: Annotated[User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
     note = crud.note.get_note_by_id(db=db, note_id=note_id, user_id=current_user.id)
     if not note:
-        raise HTTPException(status_code=404, detail="Note not found")
+        raise NoteNotFoundException()
     return crud.note.update_note(db=db, note=note, note_in=note_in)
 
 @router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_note(note_id: int, current_user: Annotated[User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
     note = crud.note.get_note_by_id(db=db, note_id=note_id, user_id=current_user.id)
     if not note:
-        raise HTTPException(status_code=404, detail="Note not found")
+        raise NoteNotFoundException()
     crud.note.delete_note(db=db, note=note)
     return {'message':'Note deleted', 'status':status.HTTP_204_NO_CONTENT }
