@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from app.schemas.user import UserRead
 
 class NoteBase(BaseModel):
     title: str = Field(..., max_length=255)
@@ -20,6 +21,6 @@ class NoteUpdate(BaseModel):
 
 class NoteRead(NoteBase):
     id: int
-    owner_id: int
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
+    owner: Optional[UserRead] = None
