@@ -24,6 +24,11 @@ class UserUpdate(BaseModel):
     password: Optional[str] = Field(None, min_length=6)
     first_name: Optional[str] = Field(None, max_length=50)
     last_name: Optional[str] = Field(None, max_length=50)
+    class Config:
+        from_attributes = True
+        alias_generator = to_camel
+        validate_by_name = True
+        use_enum_values = False
 
 
 class UserRead(UserBase):

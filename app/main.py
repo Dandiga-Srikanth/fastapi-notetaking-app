@@ -9,9 +9,9 @@ from app.middleware.global_exception_handler import ExceptionHandlerMiddleware
 
 app = FastAPI()
 
-app.add_middleware(ExceptionHandlerMiddleware)
 app.add_middleware(AuthHeaderMiddleware)
 app.add_middleware(RequestLoggerMiddleware)
+app.add_middleware(ExceptionHandlerMiddleware)
 
 app.include_router(auth.router)
 app.include_router(user.router)

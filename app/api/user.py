@@ -14,7 +14,6 @@ router = APIRouter(prefix="/api/v1/users", tags=["Users"])
 
 @router.post("/", response_model=schemas.user.UserRead, status_code=status.HTTP_201_CREATED)
 def create_user(user_in: schemas.user.UserCreate, db: Session = Depends(get_db)):
-    print("user_in",user_in)
     existing_user = crud.user.get_user_by_email(db, user_in.email)
     if existing_user:
         raise DuplicateUserException
@@ -43,7 +42,7 @@ def update_user(user_id: int, user_in: schemas.user.UserUpdate, db: Session = De
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(user_id: str, current_user: Annotated[User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
+def delete_user(user_id: str, db: Session = Depends(get_db)):
     print("user_id",user_id)
     success = crud.user.delete_user(db, int(user_id))
     if not success:

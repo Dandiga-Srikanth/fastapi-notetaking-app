@@ -7,7 +7,7 @@ from app.dependencies.db import get_db
 from app.auth.security import authenticate_user
 from app.auth.jwt import create_access_token
 
-router = APIRouter(prefix="/login", tags=["Authentication"])
+router = APIRouter(prefix="/api/v1/auth/login", tags=["Authentication"])
 
 from app.schemas.auth import Token
 
