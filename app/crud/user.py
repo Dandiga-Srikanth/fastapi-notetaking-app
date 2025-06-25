@@ -7,14 +7,14 @@ from app.auth.security import hash_password
 
 
 def get_user_by_id(db: Session, user_id: int) -> User | None:
-    return db.query(User).filter(User.id == user_id).first()
+    return db.query(User).filter(User.id == user_id, User.is_active==True).first()
 
 
 def get_user_by_email(db: Session, email: str) -> User | None:
-    return db.query(User).filter(User.email == email).first()
+    return db.query(User).filter(User.email == email, User.is_active==True).first()
 
 def get_all_users(db: Session) -> list[User]:
-    return db.query(User).all()
+    return db.query(User).filter(User.is_active==True).all()
 
 
 def create_user(db: Session, user_in: UserCreate) -> User:
@@ -24,7 +24,6 @@ def create_user(db: Session, user_in: UserCreate) -> User:
         if not role:
             raise HTTPException(status_code=400, detail="Invalid role name")
         role_id = role.id
-    print("role_id", role_id)
 
     db_user = User(
         email=user_in.email,

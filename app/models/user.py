@@ -1,5 +1,5 @@
 from app.db.session import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from app.models.mixins import AuditMixin
 from sqlalchemy.orm import relationship
 
@@ -11,6 +11,7 @@ class User(Base, AuditMixin):
     password = Column(String, nullable=False)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
 
     role_id = Column(Integer, ForeignKey("roles.id", ondelete="SET NULL"), nullable=True)
     
