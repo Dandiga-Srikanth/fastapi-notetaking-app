@@ -1,14 +1,8 @@
 from sqlalchemy.orm import Session
+from app.models.role import Role
 
 def has_permission(db: Session, role_id: int, permission_name: str) -> bool:
-    result = db.execute(
-        """
-        SELECT 1
-        FROM role_permissions rp
-        JOIN permissions p ON p.id = rp.permission_id
-        WHERE rp.role_id = :role_id AND p.name = :perm
-        LIMIT 1
-        """,
-        {"role_id": role_id, "perm": permission_name},
-    )
-    return result.scalar() is not None
+    role = db.query(Role).filter(Role.id == role_id).first()
+    if not role:
+        return False
+    return any(p.name == permission_name for p in role.permissions)
