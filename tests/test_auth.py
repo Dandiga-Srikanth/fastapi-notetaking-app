@@ -1,5 +1,5 @@
 from .config import test_user_account
-def test_user_registration(test_client, seed_roles):
+def test_user_registration(test_client, seed_roles_and_permissions):
 
     response = test_client.post("/api/v1/users/", 
                                 json=test_user_account,
@@ -9,7 +9,7 @@ def test_user_registration(test_client, seed_roles):
     assert response.status_code == 201
     assert response.json()["email"] == test_user_account.get('email','')
 
-def test_user_login(test_client, seed_roles):
+def test_user_login(test_client, seed_roles_and_permissions):
 
     response = test_client.post("/api/v1/users/", 
                                 json=test_user_account,

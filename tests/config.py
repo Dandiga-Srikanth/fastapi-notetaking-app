@@ -4,7 +4,7 @@ test_user_account = {
         "password": EnvironmentVariables.TEST_USER_ACCOUNT_PASSWORD,
         "firstName": "John",
         "lastName": "Doe",
-        "roleName": "Viewer"
+        "roleName": "Admin"
     }
 
 test_user_account_update_details = {

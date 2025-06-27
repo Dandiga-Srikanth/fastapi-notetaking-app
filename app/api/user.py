@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/v1/users", tags=["Users"])
 
 @router.post("/", response_model=schemas.user.UserRead, status_code=status.HTTP_201_CREATED)
 def create_user(user_in: schemas.user.UserCreate, db: Session = Depends(get_db)):
-    existing_user = crud.user.get_user_by_email(db, user_in.email)
+    existing_user = crud.user.get_user_by_email(db, user_in.email, status="all")
     if existing_user:
         raise DuplicateUserException
     return crud.user.create_user(db, user_in)

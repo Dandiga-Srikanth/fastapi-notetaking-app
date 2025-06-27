@@ -1,6 +1,6 @@
 from .config import test_user_account, test_note_record
 
-def test_user_can_create_and_fetch_notes(test_client, seed_roles):
+def test_user_can_create_and_fetch_notes(test_client, seed_roles_and_permissions):
     
     # --------  Create User --------
 

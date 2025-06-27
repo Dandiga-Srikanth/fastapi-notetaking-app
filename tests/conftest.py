@@ -10,6 +10,7 @@ from app.dependencies.db import get_db
 from app.main import app
 from app.core.environment_variables import EnvironmentVariables
 from app.models.role import Role
+from app.models.permission import Permission
 
 # Use a separate test database
 TEST_DATABASE_URL = EnvironmentVariables.POSTGRESQL_TEST_DATABASE_URL
@@ -56,9 +57,27 @@ def test_client(db):
         yield c
 
 @pytest.fixture(scope="function")
-def seed_roles(db: Session):
-    roles = ["Admin", "Editor", "Viewer"]
-    for name in roles:
-        role = Role(name=name)
+def seed_roles_and_permissions(db: Session):
+
+    permission_names = [
+        "create_user", "view_user", "update_user", "delete_user",
+        "create_note", "view_note", "update_note", "delete_note"
+    ]
+    permissions = [Permission(name=name) for name in permission_names]
+    db.add_all(permissions)
+    db.commit()
+
+    permission_map = {perm.name: perm for perm in db.query(Permission).all()}
+
+    role_definitions = {
+        "Admin": permission_names,
+        "Editor": ["view_user","create_note", "view_note", "update_note"],
+        "Viewer": ["view_user", "view_note"],
+    }
+
+    for role_name, perm_names in role_definitions.items():
+        role = Role(name=role_name)
+        role.permissions = [permission_map[name] for name in perm_names]
         db.add(role)
+
     db.commit()
